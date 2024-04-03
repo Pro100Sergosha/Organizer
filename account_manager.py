@@ -86,14 +86,14 @@ class AccountManager:
             return tabulate(accounts, headers=["ID", "Email", "Password"])
 
     def check_password(self, password, hashed_password):
-        return bcrypt.checkpw(password.encode('utf-8'), hashed_password)
+        return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
     def login(self, email, password):
         with open(self.filename, "r", newline="") as csvfile:
             reader = csv.DictReader(csvfile)
-
+            
             for row in list(reader):
-                if row["Email"] == email and bcrypt.checkpw(password.encode('utf-8'), row["Password"].encode('utf-8')):
+                if row["Email"] == email and self.check_password(password, row["Password"]):
                     self.logged_in = True
                     self.current_email = email
                     self.current_id = row["ID"]
