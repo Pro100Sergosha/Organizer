@@ -556,11 +556,11 @@ class AccountManager:
             if 'sqrt' in expression:
                 result = calculator.calculate_sqrt(expression)
                 if result is not None:
-                    print("Result:", result)
+                    print(f"Result: srqt {expression} = {result}")
             elif 'square' in expression:
                 result = calculator.calculate_square(expression)
                 if result is not None:
-                    print("Result:", result)
+                    print(f"Result: square {expression} = {result}")
             else:
                 # Split the expression into operands and operator
                 operator = calculator.get_operator(expression)
@@ -568,15 +568,15 @@ class AccountManager:
 
                 # Perform calculation based on operator
                 if operator == '+':
-                    print("Result:", calculator.add(num1, num2))
+                    print(f"Result: {num1} + {num2} = {calculator.add(num1, num2)}")
                 elif operator == '-':
-                    print("Result:", calculator.subtract(num1, num2))
+                    print(f"Result: {num1} - {num2} = {calculator.subtract(num1, num2)}")
                 elif operator == '*':
-                    print("Result:", calculator.multiply(num1, num2))
+                    print(f"Result: {num1} * {num2} = {calculator.multiply(num1, num2)}")
                 elif operator == '/':
-                    print("Result:", calculator.divide(num1, num2))
+                    print(f"Result: {num1} / {num2} = {calculator.divide(num1, num2)}")
                 elif operator == '%':
-                    print("Result:", calculator.percent(num1, num2))
+                    print(f"Result: {num1} % {num2} = {calculator.percent(num1, num2)}")
 
             print("1. Perform another calculation.")
             print()
