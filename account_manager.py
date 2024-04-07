@@ -11,6 +11,8 @@ from to_do_app import ToDoApp
 from contacts import Contacts
 from calculator import Calculator
 from weather import WeatherForecast
+from rate import Rate
+
 class AccountManager:
     def __init__(self, filename="accounts.csv"):
         self.filename = filename
@@ -22,7 +24,7 @@ class AccountManager:
         self.current_email = None
         self.current_account = None
 
-        self.show_format = "simple"
+        self.list_format = "simple"
 
         self.background = Back.RESET
         self.font_color = Fore.WHITE
@@ -366,7 +368,7 @@ class AccountManager:
             elif format_choice == "3":
                 print(self.demo_show("grid"))
             elif format_choice == "4":
-                print(self.demo_show("pipe"))
+                print(self.demo_show("youtrack"))
             elif format_choice == "5":
                 print(self.demo_show("orgtbl"))
             elif format_choice == "6":
@@ -376,11 +378,12 @@ class AccountManager:
             elif format_choice == "8":
                 print(self.demo_show("html"))
             elif format_choice == "9":
-                print(self.demo_show("latex"))
+                print(self.demo_show("pretty"))
             elif format_choice == "10":
                 return
-            elif format_choice in ["plain", "simple", "grid", "pipe", "orgtbl", "rst", "mediawiki", "html", "latex"]:
+            elif format_choice in ["plain", "simple", "grid", "youtrack", "orgtbl", "rst", "mediawiki", "html", "pretty"]:
                 self.list_format = format_choice
+                return
             else:
                 print("Invalid input.")
 
@@ -390,7 +393,7 @@ class AccountManager:
         print("3. Background menu")
         print("4. List style menu")
         print("5. Reset all styles")
-        print("6. Return to previus menu")
+        print("6. Return to main menu")
 
         choice = input("Enter your choice: ")
         if choice == "1":
@@ -589,21 +592,42 @@ class AccountManager:
         api_key = "629c11a02db0490f99d123751240704"
         weather = WeatherForecast(api_key)
         while True:
-            print("1. See weather")
-            print("2. Return to main menu")
-            choice = input("Enter your choice: ")
-            if choice == "1":
-                city = input("Enter the city : ")
-                days = int(input("Enter the number of days for forecast (maximum 10): "))
-                if days > 10:
-                    self.new_print("Maximum number of forecast days is 10.")
-                self.new_print(weather.display_forecast(self.show_format,city, days))
-            elif choice == "2":
-                return
+            try:
+                self.new_print("1. See weather")
+                self.new_print("2. Return to main menu")
+                choice = input("Enter your choice: ")
+                if choice == "1":
+                    city = input("Enter the city : ")
+                    days = int(input("Enter the number of days for forecast (maximum 10): "))
+
+                    if days > 10:
+                        self.new_print("Maximum number of forecast days is 10.")
+                    self.new_print(weather.display_forecast(self.list_format, city, days))
+                elif choice == "2":
+                    return
+                else:
+                    self.new_print("Invalid input.")
+            except ValueError:
+                self.new_print("Invalid input.")
+
+
+    def rate_app_menu(self):
+        rate = Rate()
+        while True:
+            print("1. Convert from GEL to currency")
+            print("2. Convert from Currency to GEL")
+            print("3. Return to main menu")
+            option = input("Enter your choice: ")
+            if option == '1':
+                rate.gel_to_currency()
+            elif option == '2':
+                rate.currency_to_gel()
+            elif option == '3':
+                break
             else:
-                print("Invalid input.")
-            
-            
+                print("Invalid option. Please enter '1' or '2' or '3'.")
+
+
 
     def main(self):
         while True:
@@ -644,7 +668,7 @@ class AccountManager:
                         continue
                     self.save_account(nickname, email, password)
             elif choice == "2":
-                self.new_print(self.show_accounts(self.show_format))
+                self.new_print(self.show_accounts(self.list_format))
             elif choice == "3":
                 email = input("Enter your Email: ")
                 password = input("Enter your password: ")
@@ -660,7 +684,8 @@ class AccountManager:
                     self.new_print("2. Contacts.")
                     self.new_print("3. Calculator applicaion.")
                     self.new_print("4. Weather application.")
-                    self.new_print("5. Return to main menu")
+                    self.new_print("5. Rate application.")
+                    self.new_print("6. Return to main menu.")
                     app_choice = input("Enter your choice: ")
                     if app_choice == "1":
                         self.todo_app_menu()
@@ -671,7 +696,11 @@ class AccountManager:
                     elif app_choice == "4":
                         self.weather_app_menu()
                     elif app_choice == "5":
+                        self.rate_app_menu()
+                    elif app_choice == "6":
                         continue
+                    else:
+                        print("Invalid input")
             elif choice == "6":
                 self.account_settings_menu()
             elif choice == "7":

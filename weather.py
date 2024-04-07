@@ -20,7 +20,7 @@ class WeatherForecast:
                 forecast_info.append([date, f"{max_temp_c}°C", f"{min_temp_c}°C", condition])
             return forecast_info
         else:
-            return f"Failed to get weather forecast. Error code: {response.status_code}"
+            f"Failed to get weather forecast. Error code: {response.status_code}"
 
     def display_forecast(self, format_choice, city, days=3):
         forecast_info = self.get_forecast(city, days)
@@ -30,4 +30,5 @@ class WeatherForecast:
         else:
             return forecast_info
         
-        
+
+

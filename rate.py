@@ -1,20 +1,7 @@
 import requests
 
 class Rate:
-    def main(self):
-        while True:
-            print("1. Convert from GEL to currency")
-            print("2. Convert from Currency to GEL")
-            print("3. Return to main menu")
-            option = input("Enter your choice: ")
-            if option == '1':
-                self.gel_to_currency()
-            elif option == '2':
-                self.currency_to_gel()
-            elif option == '3':
-                break
-            else:
-                print("Invalid option. Please enter '1' or '2' or '3'.")
+        
 
     # Here we have code, which is responsible for user typing GEL and getting amount in different currency
     def gel_to_currency(self):
@@ -90,7 +77,6 @@ class Rate:
         except ValueError:
             return False
         
-    if __name__ == "__main__":
-        main()
+
 
 ## უკან გამოსვლის ფუნქციონალი აკლია და ეგ მგონი სხვებსაც ჭირდება და ყველას ერთი და იგივე ფუნქცია გავუწეროთ
