@@ -22,19 +22,12 @@ class WeatherForecast:
         else:
             return f"Failed to get weather forecast. Error code: {response.status_code}"
 
-    def display_forecast(self, city, days=3):
+    def display_forecast(self, format_choice, city, days=3):
         forecast_info = self.get_forecast(city, days)
         if isinstance(forecast_info, list):
             headers = ["Date", "Max Temperature", "Min Temperature", "Weather Condition"]
-            return tabulate(forecast_info, headers=headers, tablefmt="pretty")
+            return tabulate(forecast_info, headers=headers, tablefmt=format_choice)
         else:
             return forecast_info
-    def main():
-        api_key = "629c11a02db0490f99d123751240704"
-        weather_forecast = WeatherForecast(api_key)
-        city = input("Введите город: ")
-        days = int(input("Введите количество дней для прогноза (максимум 10): "))
-        if days > 10:
-            print("Максимальное количество дней для прогноза - 10.")
-            return
-        weather_forecast.display_forecast(city, days)
+        
+        

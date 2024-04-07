@@ -516,7 +516,7 @@ class AccountManager:
             self.new_print("2. Show contacts.")
             self.new_print("3. Find contact.")
             self.new_print("4. Delete contact.")
-            self.new_print("5. Exit")
+            self.new_print("5. Return to main menu")
             choice = input("Enter your choice: ")
 
             if choice == "1":
@@ -578,19 +578,30 @@ class AccountManager:
                 elif operator == '%':
                     print("Result:", calculator.percent(num1, num2))
 
-
+            print("1. Perform another calculation.")
+            print()
             again = input("Do you want to perform another calculation? (yes/no): ")
             if again.lower() != 'yes':
                 return
 
-                
 
     def weather_app_menu(self):
-        weather = WeatherForecast()
+        api_key = "629c11a02db0490f99d123751240704"
+        weather = WeatherForecast(api_key)
         while True:
-            city = input("Enter city: ")
-            days = int(input("Enter the number of days for forecast (maximum 10): "))
-            
+            print("1. See weather")
+            print("2. Return to main menu")
+            choice = input("Enter your choice: ")
+            if choice == "1":
+                city = input("Enter the city : ")
+                days = int(input("Enter the number of days for forecast (maximum 10): "))
+                if days > 10:
+                    self.new_print("Maximum number of forecast days is 10.")
+                self.new_print(weather.display_forecast(self.show_format,city, days))
+            elif choice == "2":
+                return
+            else:
+                print("Invalid input.")
             
             
 
@@ -649,6 +660,7 @@ class AccountManager:
                     self.new_print("2. Contacts.")
                     self.new_print("3. Calculator applicaion.")
                     self.new_print("4. Weather application.")
+                    self.new_print("5. Return to main menu")
                     app_choice = input("Enter your choice: ")
                     if app_choice == "1":
                         self.todo_app_menu()
@@ -657,7 +669,9 @@ class AccountManager:
                     elif app_choice == "3":
                         self.calculator_app_menu()
                     elif app_choice == "4":
-                        ...
+                        self.weather_app_menu()
+                    elif app_choice == "5":
+                        continue
             elif choice == "6":
                 self.account_settings_menu()
             elif choice == "7":
