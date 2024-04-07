@@ -1,6 +1,2 @@
-ID,Email,Password
-0,email@mail.rom,$2b$12$.hR34O6oJec3TiNnstp8geKwrY5/O6NsO2HNINBCDcuyFwu7aV/9e
-2,hello@mail.ru,$2b$12$Ia5kcbontpZoyaNtSd9w1eRvCETS1fzfr2ja4xe0MgdIUhp3jROX6
-4,sergo@mail.ru,$2b$12$eQwgppAyMhNqS4G5J0Gm2eG0z/bv6zrYFnao32iYzCMZUp8J7DI1K
-5,sergo2@mail.ru,$2b$12$UxrmZUKgRs6L8GTMSE/CdetYz3sNsKcUdHRNIeKsxYA3B8AuSsCX6
-6,sergo3@mail.ru,$2b$12$eEUKHHqP/L1GZ9ZO25s7Z.1Om9Ki3b0FTooGyfPrUykEf.D6h61Wi
+ID,Nickname,Email,Password
+1,serogsha,sergo@mail.ru,$2b$12$XWoxJNYlsE8f8TpsgUCiIOvNRdnmGV25DAdsVFMS0dhcmX/xIelNS

@@ -3,15 +3,15 @@ import requests
 # Here we are giving a choice to user, which operation is needed
 def main():
     while True:
-        option = input("Enter '1' to convert from GEL to currency or '2' to convert from currency to GEL: ")
+        option = input("Enter '1' to convert from GEL to currency or '2' to convert from currency to GEL or enter 3 to exit: ")
         if option == '1':
             gel_to_currency()
-            break
         elif option == '2':
             currency_to_gel()
+        elif option == '3':
             break
         else:
-            print("Invalid option. Please enter '1' or '2'.")
+            print("Invalid option. Please enter '1' or '2' or '3'.")
 
 # Here we have code, which is responsible for user typing GEL and getting amount in different currency
 def gel_to_currency():

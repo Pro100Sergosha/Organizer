@@ -2,6 +2,7 @@ import csv
 import os
 from tabulate import tabulate
 from colorama import init, Fore, Back, Style
+
 class Contacts:
     def __init__(self, user_id = None):
         self.user_id = user_id

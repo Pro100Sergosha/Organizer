@@ -29,4 +29,12 @@ class WeatherForecast:
             return tabulate(forecast_info, headers=headers, tablefmt="pretty")
         else:
             return forecast_info
-
+    def main():
+        api_key = "629c11a02db0490f99d123751240704"
+        weather_forecast = WeatherForecast(api_key)
+        city = input("Введите город: ")
+        days = int(input("Введите количество дней для прогноза (максимум 10): "))
+        if days > 10:
+            print("Максимальное количество дней для прогноза - 10.")
+            return
+        weather_forecast.display_forecast(city, days)

@@ -9,7 +9,8 @@ from colorama import init, Fore, Back, Style
 
 from to_do_app import ToDoApp
 from contacts import Contacts
-
+from calculator import Calculator
+from weather import WeatherForecast
 class AccountManager:
     def __init__(self, filename="accounts.csv"):
         self.filename = filename
@@ -541,7 +542,57 @@ class AccountManager:
                 self.new_print("Invalid choice. Please enter a valid option.")
 
 
+    def calculator_app_menu(self):
+        calculator = Calculator()
+        while True:
+            expression = input("Enter an expression: ")
 
+            # Validate input
+            if not calculator.is_valid_expression(expression):
+                print("Invalid expression. Please enter a valid expression.")
+                continue
+
+            # Check for square root or square operation
+            if 'sqrt' in expression:
+                result = calculator.calculate_sqrt(expression)
+                if result is not None:
+                    print("Result:", result)
+            elif 'square' in expression:
+                result = calculator.calculate_square(expression)
+                if result is not None:
+                    print("Result:", result)
+            else:
+                # Split the expression into operands and operator
+                operator = calculator.get_operator(expression)
+                num1, num2 = map(float, expression.split(operator))
+
+                # Perform calculation based on operator
+                if operator == '+':
+                    print("Result:", calculator.add(num1, num2))
+                elif operator == '-':
+                    print("Result:", calculator.subtract(num1, num2))
+                elif operator == '*':
+                    print("Result:", calculator.multiply(num1, num2))
+                elif operator == '/':
+                    print("Result:", calculator.divide(num1, num2))
+                elif operator == '%':
+                    print("Result:", calculator.percent(num1, num2))
+
+
+            again = input("Do you want to perform another calculation? (yes/no): ")
+            if again.lower() != 'yes':
+                return
+
+                
+
+    def weather_app_menu(self):
+        weather = WeatherForecast()
+        while True:
+            city = input("Enter city: ")
+            days = int(input("Enter the number of days for forecast (maximum 10): "))
+            
+            
+            
 
     def main(self):
         while True:
@@ -596,11 +647,17 @@ class AccountManager:
                     self.new_print("Application Menu.")
                     self.new_print("1. To-do application.")
                     self.new_print("2. Contacts.")
+                    self.new_print("3. Calculator applicaion.")
+                    self.new_print("4. Weather application.")
                     app_choice = input("Enter your choice: ")
                     if app_choice == "1":
                         self.todo_app_menu()
                     elif app_choice == "2":
                         self.contact_app_menu()
+                    elif app_choice == "3":
+                        self.calculator_app_menu()
+                    elif app_choice == "4":
+                        ...
             elif choice == "6":
                 self.account_settings_menu()
             elif choice == "7":
