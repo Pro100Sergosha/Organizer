@@ -1,4 +1,5 @@
 import math
+import re
 
 # This is the main function where the user can enter numbers and perform math operations
 def main():
@@ -40,23 +41,21 @@ def main():
         if again.lower() != 'yes':
             break
 
-# This is function to validate if the expression contains only numbers and valid operators
 def is_valid_expression(expression):
     valid_operators = ['+', '-', '*', '/', '%']
-    keywords = ['sqrt', 'square']  # Adding 'square' to the list of keywords
+    keywords = ['sqrt', 'square']
     
-    # It checks if expression contains only numbers and valid operators
-    for char in expression:
-        if not char.isdigit() and char not in valid_operators and char != '.' and char not in ''.join(keywords):
-            return False
+    # Split the expression based on operators and keywords
+    parts = re.split(r'(\+|-|\*|/|%|sqrt|square)', expression)
     
-    # It checks if expression contains keywords without adjacent digits
-    for keyword in keywords:
-        if keyword in expression:
-            if not any(char.isdigit() for char in expression.split(keyword)[1]):
+    # Iterate over the parts to check validity
+    for part in parts:
+        part = part.strip()  # Remove leading and trailing whitespace
+        if part:  # Check if the part is not empty
+            if part not in valid_operators and not part.isdigit() and part not in keywords:  # Check if it's not a valid operator, number, or keyword
                 return False
-            
     return True
+
 
 
 # This is function to get the operator from the expression
