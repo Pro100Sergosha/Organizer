@@ -13,6 +13,29 @@ from calculator import Calculator
 from weather import WeatherForecast
 from rate import Rate
 
+# This is a Python program that manages user accounts and provides various functionalitiesю
+
+# The program is structured into several classes:
+
+# 1. AccountManager: Manages user accounts, including registration, login, logout, and account settings.
+# 2. ToDoApp: Manages tasks for a logged-in user, including adding, marking as completed, showing, and deleting tasks.
+# 3. Contacts: Manages contacts for a logged-in user, including adding, showing, finding, and deleting contacts.
+# 4. Calculator: Provides basic calculator functionalities like addition, subtraction, multiplication, division, percentage, square root, and square operations.
+# 5. WeatherForecast: Retrieves and displays weather forecast information for a specific city for a specified number of days.
+# 6. Rate: Converts currency between Georgian Lari (GEL) and other currencies.
+
+# The main functionality is accessible through a menu-driven interface:
+
+# - Register a new account: Allows users to create a new account with a unique nickname, email, and password.
+# - Show the list of accounts: Displays the list of registered accounts with their IDs, nicknames, and emails.
+# - Log in: Allows users to log in with their registered email and password.
+# - Logout: Logs out the current user.
+# - Applications: Provides access to different applications like the to-do list, contacts, calculator, weather forecast, and currency rate converter.
+# - Account Settings: Allows logged-in users to change their nickname, password, email, and list format settings.
+# - Style Settings: Allows users to customize the font color, font style, and background color for the terminal output.
+
+# Overall, this program serves as a comprehensive tool for managing user accounts and accessing various productivity and utility applications.
+
 class AccountManager:
     def __init__(self, filename="accounts.csv"):
         self.filename = filename
