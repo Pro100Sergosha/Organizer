@@ -1,17 +1,38 @@
 import requests
 
 class Rate:
+<<<<<<< HEAD
         
+=======
+    def main(self):
+        while True:
+            # Display menu options
+            print("1. Convert from GEL to currency")
+            print("2. Convert from Currency to GEL")
+            print("3. Return to main menu")
+            # Get user input for choice
+            option = input("Enter your choice: ")
+            if option == '1':
+                self.gel_to_currency()
+            elif option == '2':
+                self.currency_to_gel()
+            elif option == '3':
+                break
+            else:
+                print("Invalid option. Please enter '1' or '2' or '3'.")
+>>>>>>> fbf4879843466c5a062c568951549eac86d4eec2
 
-    # Here we have code, which is responsible for user typing GEL and getting amount in different currency
+    # Convert from GEL to another currency
     def gel_to_currency(self):
         while True:
             currency_code = input("Enter the currency code: ").upper()
-            if not currency_code.isalpha() or len(currency_code) != 3:
+            # Validate currency code
+            if not self.validate_currency_code(currency_code):
                 print("Invalid currency code. Please enter a valid 3-character currency code.")
                 continue
             amount_gel = input("Enter the amount in GEL: ")
-            if not amount_gel.isdigit() and not self.is_float(amount_gel):
+            # Validate amount
+            if not self.is_numeric(amount_gel):
                 print("Invalid amount. Please enter a valid numeric amount.")
                 continue
             else:
@@ -25,19 +46,21 @@ class Rate:
             quantity = currency_info['quantity']
             converted_amount = amount_gel / (rate * quantity)
             converted_amount_rounded = round(converted_amount, 2)
-            print(f"{amount_gel} GEL is approximately {converted_amount_rounded} {currency_info['code']}")
+            print(f"{amount_gel} GEL is approximately {converted_amount_rounded} {currency_info['code']}\n")
         else:
             print("Failed to retrieve currency information. Please enter a valid currency code.")
 
-    # Here we have code, which is responsible for user typing currency and getting amount in GEL
+    # Convert from another currency to GEL
     def currency_to_gel(self):
         while True:
             currency_code = input("Enter the currency code: ").upper()
-            if not currency_code.isalpha() or len(currency_code) != 3:
+            # Validate currency code
+            if not self.validate_currency_code(currency_code):
                 print("Invalid currency code. Please enter a valid 3-character currency code.")
                 continue
             amount_currency = input("Enter the amount in the specified currency: ")
-            if not amount_currency.isdigit() and not self.is_float(amount_currency):
+            # Validate amount
+            if not self.is_numeric(amount_currency):
                 print("Invalid amount. Please enter a valid numeric amount.")
                 continue
             else:
@@ -51,13 +74,17 @@ class Rate:
             quantity = currency_info['quantity']
             total = rate * quantity * amount_currency
             total_rounded = round(total, 2)
-            print(f"{amount_currency} {currency_info['code']} is approximately {total_rounded} GEL")
+            print(f"{amount_currency} {currency_info['code']} is approximately {total_rounded} GEL\n")
         else:
             print("Failed to retrieve currency information. Please enter a valid currency code.")
 
+    # Validate if the currency code exists in the URL data
+    def validate_currency_code(self, currency_code):
+        currency_info = self.get_currency_info(currency_code)
+        return currency_info is not None
 
-    # Here we are getting information from url:
-    def get_currency_info(self,currency_code):
+    # Fetch currency information from the URL
+    def get_currency_info(self, currency_code):
         try:
             response = requests.get("https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/ka/json/?date=2024-03-31")
             data = response.json()
@@ -70,13 +97,20 @@ class Rate:
             print("Error fetching data")
             return None
 
-    def is_float(self,s):
+    # Check if a string can be converted to a float
+    def is_numeric(self, s):
         try:
             float(s)
             return True
         except ValueError:
             return False
+<<<<<<< HEAD
         
 
+=======
+>>>>>>> fbf4879843466c5a062c568951549eac86d4eec2
 
-## უკან გამოსვლის ფუნქციონალი აკლია და ეგ მგონი სხვებსაც ჭირდება და ყველას ერთი და იგივე ფუნქცია გავუწეროთ
+# Entry point of the program
+if __name__ == "__main__":
+    rate = Rate()
+    rate.main()
