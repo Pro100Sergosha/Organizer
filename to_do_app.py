@@ -1,6 +1,7 @@
 import csv
 import os
 from tabulate import tabulate
+from colorama import init, Fore, Back, Style
 class ToDoApp:
     def __init__(self, user_id):
         self.user_id = user_id
@@ -10,7 +11,7 @@ class ToDoApp:
         self.current_directory = os.path.dirname(__file__)
         self.tasks_folder = os.path.join(self.current_directory, 'Tasks')
         self.file_path = os.path.join(self.tasks_folder, self.file_path)
-    
+        
     def save_task(self, task):
         if not os.path.exists(self.tasks_folder):
             os.makedirs(self.tasks_folder)
@@ -33,12 +34,12 @@ class ToDoApp:
             if os.stat(self.file_path).st_size == 0:
                 writer.writeheader()
             writer.writerow({"ID": task_id, "Task": task, "Completed": False})
-            print("Task successfully added with ID:", task_id)
-        print(self.show_tasks())
+
 
     def file_exists(self):
         return os.path.exists(self.file_path)
-        
+
+
     def list_tasks(self):
         with open(self.file_path, "r", newline="") as csvfile:
             reader = csv.DictReader(csvfile)
@@ -46,13 +47,21 @@ class ToDoApp:
             tasks.extend(task for task in reader)
             return tasks
 
-    def show_tasks(self):
+    def check_file_exists(self, file_path, fieldnames):
+        if not os.path.exists(file_path):
+            with open(file_path, "w", newline="") as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+
+    def show_tasks(self, format):
+        self.check_file_exists(self.file_path, self.fieldnames)
         tasks = self.list_tasks()
         new_tasks = []
         for task in tasks:
             new_tasks.append([task["ID"],task["Task"], task["Completed"]])
-        return tabulate(new_tasks, headers=["ID", "Task", "Completed"])
+        return tabulate(new_tasks, headers=["ID", "Task", "Completed"], tablefmt = format)
    
+
     def check_task(self, task_id):
         tasks = self.list_tasks()
         task_exists = any(task["ID"] == task_id for task in tasks)
