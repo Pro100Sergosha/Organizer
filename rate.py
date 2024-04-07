@@ -1,26 +1,6 @@
 import requests
 
 class Rate:
-<<<<<<< HEAD
-        
-=======
-    def main(self):
-        while True:
-            # Display menu options
-            print("1. Convert from GEL to currency")
-            print("2. Convert from Currency to GEL")
-            print("3. Return to main menu")
-            # Get user input for choice
-            option = input("Enter your choice: ")
-            if option == '1':
-                self.gel_to_currency()
-            elif option == '2':
-                self.currency_to_gel()
-            elif option == '3':
-                break
-            else:
-                print("Invalid option. Please enter '1' or '2' or '3'.")
->>>>>>> fbf4879843466c5a062c568951549eac86d4eec2
 
     # Convert from GEL to another currency
     def gel_to_currency(self):
@@ -104,11 +84,6 @@ class Rate:
             return True
         except ValueError:
             return False
-<<<<<<< HEAD
-        
-
-=======
->>>>>>> fbf4879843466c5a062c568951549eac86d4eec2
 
 # Entry point of the program
 if __name__ == "__main__":
