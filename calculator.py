@@ -1,38 +1,110 @@
-# This is function, where user can enter numbers and make math
-def main():
-    print("Select operation: \n1. Add\n2. Subtract\n3. Multiply\n4. Divide")
-    while True:
-        choice = input("Enter choice (1/2/3/4): ")
-        if choice in ('1', '2', '3', '4'):
-            num1 = float(input("Enter first number: "))
-            num2 = float(input("Enter second number: "))
+import math
 
-            if choice == '1':
-                print("Result:", add(num1, num2))
-            elif choice == '2':
-                print("Result:", subtract(num1, num2))
-            elif choice == '3':
-                print("Result:", multiply(num1, num2))
-            elif choice == '4':
-                print("Result:", divide(num1, num2))
-            break
+# This is the main function where the user can enter numbers and perform math operations
+def main():
+    while True:
+        expression = input("Enter an expression: ")
+
+        # Validate input
+        if not is_valid_expression(expression):
+            print("Invalid expression. Please enter a valid expression.")
+            continue
+
+        # Check for square root or square operation
+        if 'sqrt' in expression:
+            result = calculate_sqrt(expression)
+            if result is not None:
+                print("Result:", result)
+        elif 'square' in expression:
+            result = calculate_square(expression)
+            if result is not None:
+                print("Result:", result)
         else:
-            print("Invalid Input")
+            # Split the expression into operands and operator
+            operator = get_operator(expression)
+            num1, num2 = map(float, expression.split(operator))
+
+            # Perform calculation based on operator
+            if operator == '+':
+                print("Result:", add(num1, num2))
+            elif operator == '-':
+                print("Result:", subtract(num1, num2))
+            elif operator == '*':
+                print("Result:", multiply(num1, num2))
+            elif operator == '/':
+                print("Result:", divide(num1, num2))
+            elif operator == '%':
+                print("Result:", percent(num1, num2))
+
+        again = input("Do you want to perform another calculation? (yes/no): ")
+        if again.lower() != 'yes':
+            break
+
+# This is function to validate if the expression contains only numbers and valid operators
+def is_valid_expression(expression):
+    valid_operators = ['+', '-', '*', '/', '%']
+    keywords = ['sqrt', 'square']  # Adding 'square' to the list of keywords
+    
+    # It checks if expression contains only numbers and valid operators
+    for char in expression:
+        if not char.isdigit() and char not in valid_operators and char != '.' and char not in ''.join(keywords):
+            return False
+    
+    # It checks if expression contains keywords without adjacent digits
+    for keyword in keywords:
+        if keyword in expression:
+            if not any(char.isdigit() for char in expression.split(keyword)[1]):
+                return False
+            
+    return True
+
+
+# This is function to get the operator from the expression
+def get_operator(expression):
+    for char in expression:
+        if char in ['+', '-', '*', '/', '%']:
+            return char
+
+# This is function to calculate square root
+def calculate_sqrt(expression):
+    try:
+        num = float(expression.split('sqrt')[1])
+        if num < 0:
+            return "Error! Square root of a negative number is not allowed."
+        return math.sqrt(num)
+    except:
+        return "Error! Invalid expression for square root."
+
+# This is function to calculate square
+def calculate_square(expression):
+    try:
+        num = float(expression.split('square')[1])
+        return num ** 2
+    except:
+        return "Error! Invalid expression for square."
 
 # This is function for adding numbers
 def add(x, y):
     return x + y
+
 # This is function for subtracting numbers
 def subtract(x, y):
     return x - y
+
 # This is function for multiplying numbers
 def multiply(x, y):
     return x * y
+
 # This is function for dividing numbers
 def divide(x, y):
     if y == 0:
         return "Error! Division by zero is not allowed."
     else:
         return x / y
+
+# This is function for %
+def percent(x, y):
+    a = x * y
+    return a / 100
 
 main()
