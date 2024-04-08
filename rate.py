@@ -85,7 +85,23 @@ class Rate:
         except ValueError:
             return False
 
+    def rate_app_menu(self):
+        rate = Rate()
+        while True:
+            print("1. Convert from GEL to currency")
+            print("2. Convert from Currency to GEL")
+            print("3. Return to main menu")
+            option = input("Enter your choice: ")
+            if option == '1':
+                rate.gel_to_currency()
+            elif option == '2':
+                rate.currency_to_gel()
+            elif option == '3':
+                break
+            else:
+                print("Invalid option. Please enter '1' or '2' or '3'.")
+
 # Entry point of the program
 if __name__ == "__main__":
     rate = Rate()
-    rate.main()
+    rate.rate_app_menu()

@@ -4,7 +4,7 @@ import re
 # This is the main function where the user can enter numbers and perform math operations
 
 class Calculator:
-    def is_valid_expression(self,expression):
+    def is_valid_expression(self, expression):
         valid_operators = ['+', '-', '*', '/', '%']
         keywords = ['sqrt', 'square']
         

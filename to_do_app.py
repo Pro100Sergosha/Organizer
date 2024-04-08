@@ -3,7 +3,7 @@ import os
 from tabulate import tabulate
 from colorama import init, Fore, Back, Style
 class ToDoApp:
-    def __init__(self, user_id):
+    def __init__(self, user_id = None):
         self.user_id = user_id
         self.file_path = f"{user_id}'s_tasks.csv"
         self.fieldnames = ["ID", "Task", "Completed"]
