@@ -108,3 +108,4 @@ class Calculator:
             again = input("Do you want to perform another calculation? (yes/no): ")
             if again.lower() != 'yes':
                 return
+

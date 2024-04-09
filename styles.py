@@ -105,7 +105,7 @@ class Styles:
                 return self._background
             else:
                 self.new_print("Invalid input")
-        
+
     def list_style_menu(self):
         while True:
             self.new_print("1. Plain")
@@ -183,7 +183,7 @@ class Styles:
     def list_format(self):
         return self._list_format
     def new_print(self, text = None):
-        return print(self._font_color + self._background + self._font_style + text)
+        return print(self._font_color + self._background + self._font_style + f"{text}")
 
 if __name__ == "__main__":
     style = Styles()

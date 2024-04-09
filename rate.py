@@ -3,6 +3,23 @@ from styles import Styles
 class Rate:
     def __init__(self, style_menu = Styles()):
         self.style_menu = style_menu
+
+
+    # Fetch currency information from the URL
+    def get_currency_info(self, currency_code):
+        try:
+            response = requests.get("https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/ka/json/?date=2024-03-31")
+            data = response.json()
+            currencies = data[0]["currencies"]
+            for currency in currencies:
+                if currency['code'] == currency_code:
+                    return currency
+            return None
+        except requests.RequestException:
+            self.style_menu.new_print("Error fetching data")
+            return None
+        
+
     # Convert from GEL to another currency
     def gel_to_currency(self):
         while True:
@@ -27,7 +44,7 @@ class Rate:
             quantity = currency_info['quantity']
             converted_amount = amount_gel / (rate * quantity)
             converted_amount_rounded = round(converted_amount, 2)
-            self.style_menu.new_print(f"{amount_gel} GEL is approximately {converted_amount_rounded} {currency_info['code']}\n")
+            self.style_menu.new_print(f"{amount_gel} GEL is approximately {converted_amount_rounded} {currency_info['code']}")
         else:
             self.style_menu.new_print("Failed to retrieve currency information. Please enter a valid currency code.")
 
@@ -46,37 +63,24 @@ class Rate:
                 continue
             else:
                 amount_currency = float(amount_currency)
-                break
             
-        currency_info = self.get_currency_info(currency_code)
-        
-        if currency_info:
-            rate = currency_info['rate']
-            quantity = currency_info['quantity']
-            total = rate * quantity * amount_currency
-            total_rounded = round(total, 2)
-            self.style_menu.new_print(f"{amount_currency} {currency_info['code']} is approximately {total_rounded} GEL\n")
-        else:
-            self.style_menu.new_print("Failed to retrieve currency information. Please enter a valid currency code.")
+            currency_info = self.get_currency_info(currency_code)
+            
+            if currency_info:
+                rate = currency_info['rate']
+                quantity = currency_info['quantity']
+                total = rate * quantity * amount_currency
+                total_rounded = round(total, 2)
+                self.style_menu.new_print(f"{amount_currency} {currency_info['code']} is approximately {total_rounded} GEL\n")
+            else:
+                self.style_menu.new_print("Failed to retrieve currency information. Please enter a valid currency code.")
 
     # Validate if the currency code exists in the URL data
     def validate_currency_code(self, currency_code):
         currency_info = self.get_currency_info(currency_code)
         return currency_info is not None
 
-    # Fetch currency information from the URL
-    def get_currency_info(self, currency_code):
-        try:
-            response = requests.get("https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/ka/json/?date=2024-03-31")
-            data = response.json()
-            currencies = data[0]["currencies"]
-            for currency in currencies:
-                if currency['code'] == currency_code:
-                    return currency
-            return None
-        except requests.RequestException:
-            self.style_menu.new_print("Error fetching data")
-            return None
+    
 
     # Check if a string can be converted to a float
     def is_numeric(self, s):
@@ -87,16 +91,15 @@ class Rate:
             return False
 
     def rate_app_menu(self):
-        rate = Rate()
         while True:
             self.style_menu.new_print("1. Convert from GEL to currency")
             self.style_menu.new_print("2. Convert from Currency to GEL")
             self.style_menu.new_print("3. Return to main menu")
             option = input("Enter your choice: ")
             if option == '1':
-                rate.gel_to_currency()
+                self.gel_to_currency()
             elif option == '2':
-                rate.currency_to_gel()
+                self.currency_to_gel()
             elif option == '3':
                 break
             else:

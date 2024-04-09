@@ -13,6 +13,7 @@ from calculator import Calculator
 from weather import WeatherForecast
 from rate import Rate
 from styles import Styles
+from update_account import Update
 
 # This is a Python program that manages user accounts and provides various functionalitiesю
 
@@ -40,16 +41,18 @@ from styles import Styles
 class AccountManager:
     def __init__(self, filename="accounts.csv"):
         self.filename = filename
-        self.current_id = None
         self.fieldnames = ["ID", "Nickname", "Email", "Password"]
         self.email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         self.password_regex = r"^(?=.*\d)(?=.*[!@#$%^&*()])(?=.*[a-zA-Z]).{8,}$"
+
         self.logged_in = False
+        self.current_id = None
         self.current_email = None
         self.current_account = None
-
+        self.current_nickname = None
 
         self._style_menu = Styles()
+
 
     def validate_email(self, email):
         return re.match(self.email_regex, email)
@@ -98,17 +101,6 @@ class AccountManager:
             writer.writerow({"ID": next_id, "Nickname": nickname, "Email": email, "Password": hashed_password.decode()})
             print("You've registered!")
 
- 
-
-    def account(self, current_id):
-        with open("accounts.csv", "r") as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                for key, val in row.items():
-                    if val == current_id:
-                        return row
-            return
-
 
     def email_exists(self, email):
         with open(self.filename, "r", newline="") as csvfile:
@@ -139,7 +131,14 @@ class AccountManager:
     def check_password(self, password, hashed_password):
         return bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8'))
 
-
+    def account(self):
+        with open("accounts.csv", "r") as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                for key, val in row.items():
+                    if val == self.current_id:
+                        return row
+            return row
 
 
     def login(self, email, password):
@@ -162,7 +161,8 @@ class AccountManager:
         self.logged_in = False
         self.current_email = None
 
-    
+
+
 
     def change_password(self):
         if not self.logged_in:
@@ -255,54 +255,11 @@ class AccountManager:
         self._style_menu.new_print("Nickname successfully updated.")
 
 
-    def delete_account(self, email):
-        accounts = []
-        with open(self.filename, "r", newline="") as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                if row["Email"] != email:
-                    accounts.append(row)
 
-        with open(self.filename, "w", newline="") as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
-            writer.writeheader()
-            for account in accounts:
-                writer.writerow(account)
-        self.current_email = None
-        self.logged_in = False
-        self._style_menu.new_print("Account deleted.")
+    
     
 
-    def account_settings_menu(self):
-        if self.logged_in:
-            self._style_menu.new_print("\nSettings")
-            self._style_menu.new_print("1. Change nickname")
-            self._style_menu.new_print("2. Change password")
-            self._style_menu.new_print("3. Change email")
-            self._style_menu.new_print("4. Delete account")
-            self._style_menu.new_print("5. Return to the main menu")
-            setting_choice = input("Select an action: ")
-            if setting_choice == "1":
-                self.change_nickname()
-            elif setting_choice == "2":
-                self.change_password()
-            elif setting_choice == "3":
-                self.change_email()
-            elif setting_choice == "4":
-                password = input("Enter your password: ")
-                rewrite_password = input("Rewrite your password: ")
-                current_password = self.account(self.current_id)['Password']
-                if password == rewrite_password and bcrypt.checkpw(password.encode('utf-8'), current_password.encode('utf-8')):
-                    self.delete_account(self.current_email)
-                else:
-                    self._style_menu.new_print("Email does not exist")
-            elif setting_choice == "5":
-                self._style_menu.new_print("Returning to the main menu")
-            else:
-                self._style_menu.new_print("Invalid input. Please select an action again.")
-        else:
-            self._style_menu.new_print("You need to log in to access settings.")
-
+    
 
     def main(self):
         while True:
@@ -382,7 +339,9 @@ class AccountManager:
                     else:
                         self._style_menu.new_print("Invalid input")
             elif choice == "6":
-                self.account_settings_menu()
+                account = Update(self.current_id,self.logged_in, self.account["Nickname"], self.current_email, self.account["Password"], self._style_menu)
+                account.account_settings_menu()
+            
             elif choice == "7":
                 self._style_menu.style_settings_menu()
             elif choice == "8":
