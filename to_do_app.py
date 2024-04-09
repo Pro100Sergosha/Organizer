@@ -1,10 +1,12 @@
 import csv
 import os
 from tabulate import tabulate
-from colorama import init, Fore, Back, Style
+from styles import Styles
 class ToDoApp:
-    def __init__(self, user_id = None):
+    def __init__(self, user_id = None, user_mail = None, style_menu = Styles()):
         self.user_id = user_id
+        self.style_menu = style_menu
+        self.user_mail = user_mail
         self.file_path = f"{user_id}'s_tasks.csv"
         self.fieldnames = ["ID", "Task", "Completed"]
         self.current_task_id = None
@@ -53,13 +55,13 @@ class ToDoApp:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
 
-    def show_tasks(self, format):
+    def show_tasks(self):
         self.check_file_exists(self.file_path, self.fieldnames)
         tasks = self.list_tasks()
         new_tasks = []
         for task in tasks:
             new_tasks.append([task["ID"],task["Task"], task["Completed"]])
-        return tabulate(new_tasks, headers=["ID", "Task", "Completed"], tablefmt = format)
+        return tabulate(new_tasks, headers=["ID", "Task", "Completed"], tablefmt = self.style_menu.list_format())
    
 
     def check_task(self, task_id):
@@ -109,6 +111,60 @@ class ToDoApp:
                 writer.writerows(tasks)
             print(f"Task deleted.")
 
+
+    def todo_app_menu(self):
+        if self.user_id == None:
+            self.style_menu.new_print("You need to be logged in to access To-do application")
+            return False
+        else:
+            self.style_menu.new_print(f"Logged in as {self.user_mail}")
+        while True:
+            self.style_menu.new_print("\nTask Management Menu")
+            self.style_menu.new_print("1. Add a task")
+            self.style_menu.new_print("2. Mark a task as completed")
+            self.style_menu.new_print("3. Show all tasks")
+            self.style_menu.new_print("4. Delete a task")
+            self.style_menu.new_print("5. Return to main menu")
+
+            choice = input("Choose an action: ")
+
+            if choice == "1":
+                list_tasks = []
+                while True:
+                    task = input("Enter the task or press ENTER to finish: ").strip()
+                    if task == "":
+                        for task in list_tasks:
+                            self.save_task(task)
+                        self.style_menu.new_print(self.show_tasks())
+                        break
+                    else:
+                        list_tasks.append(task)
+            elif choice == "2":
+                if not self.file_exists():
+                    self.style_menu.new_print("You need to add task first!")
+                else:
+                    self.style_menu.new_print(self.show_tasks())
+                    task_id = input("Enter the task ID to mark as completed: ")
+                    self.mark_task_completed(task_id)
+            elif choice == "3":
+                if not self.file_exists():
+                    self.style_menu.new_print("You need to write your task first!")
+                else:
+                    self.style_menu.new_print(self.show_tasks())
+            elif choice == "4":
+                self.style_menu.new_print(self.show_tasks())
+                task_id = input("Enter the task ID to delete: ").strip()
+                if not self.file_exists():
+                    self.style_menu.new_print("You need to write your task first!")
+                elif task_id == "":    
+                    self.style_menu.new_print("Task ID not found")
+                else:
+                    self.delete_task(task_id)
+            elif choice == "5":
+                self.style_menu.new_print("Returning to the main menu.")
+                break
+            else:
+                self.style_menu.new_print("Invalid input. Please choose an action again.")
         
 if __name__ == "__main__":
     app = ToDoApp()

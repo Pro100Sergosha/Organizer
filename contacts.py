@@ -1,11 +1,12 @@
 import csv
 import os
 from tabulate import tabulate
-from colorama import init, Fore, Back, Style
+from styles import Styles
 
 class Contacts:
-    def __init__(self, user_id = None):
+    def __init__(self, user_id = None, style_menu = Styles()):
         self.user_id = user_id
+        self.style_menu = style_menu
         self.file_path = f"{user_id}'s_contacts.csv"
         self.fieldnames = ["ID", "First Name", "Last Name", "Phone Number", "Email"]
         self.current_directory = os.path.dirname(__file__)
@@ -51,13 +52,13 @@ class Contacts:
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
 
-    def show_contacts(self, format):
+    def show_contacts(self):
         self.check_file_exists(self.file_path, self.fieldnames)
         contacts = self.list_contacts()
         new_contacts = []
         for contact in contacts:
             new_contacts.append([contact["ID"], contact["First Name"], contact["Last Name"], contact["Phone Number"], contact["Email"]])
-        return tabulate(new_contacts, headers=["ID", "First Name", "Last Name", "Phone Number", "Email"], tablefmt = format)
+        return tabulate(new_contacts, headers=["ID", "First Name", "Last Name", "Phone Number", "Email"], tablefmt = self.style_menu.list_format())
 
 
     def check_contact(self, contact_id):
@@ -94,6 +95,37 @@ class Contacts:
         else:        
             return tabulate(new_contacts, headers=["ID", "First Name", "Last Name", "Phone Number", "Email"])
 
+
+    def contact_app_menu(self):
+        while True:
+            self.style_menu.new_print("1. Add contact.")
+            self.style_menu.new_print("2. Show contacts.")
+            self.style_menu.new_print("3. Find contact.")
+            self.style_menu.new_print("4. Delete contact.")
+            self.style_menu.new_print("5. Return to main menu")
+            choice = input("Enter your choice: ")
+
+            if choice == "1":
+                first_name = input("Enter first name: ")
+                last_name = input("Enter last name: ")
+                phone_number = input("Enter phone number: ")
+                email = input("Enter email: ").lower()
+                self.save_contact(first_name, last_name, phone_number, email)
+
+            elif choice == "2":
+                self.style_menu.new_print(self.show_contacts())
+
+            elif choice == "3":
+                contact = input("Find contact: ")
+                self.style_menu.new_print(self.find_contact(contact))
+            elif choice == "4":
+                self.style_menu.new_print(self.show_contacts())
+                contact_id = input("Enter ID of the contact to delete: ")
+                self.delete_contact(contact_id)
+            elif choice == "5":
+                break
+            else:
+                self.style_menu.new_print("Invalid choice. Please enter a valid option.")
 
 
 

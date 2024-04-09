@@ -126,14 +126,14 @@ class AccountManager:
                 writer.writeheader()
 
 
-    def show_accounts(self, format):
+    def show_accounts(self):
         self.check_file_exists(self.filename, self.fieldnames)
         with open(self.filename, "r", newline="") as csvfile:
             reader = csv.DictReader(csvfile)
             accounts = []
             for row in reader:
                 accounts.append([row["ID"], row["Nickname"], row["Email"]])
-            return tabulate(accounts, headers=["ID", "Nickname", "Email", "Password"], tablefmt = format)
+            return tabulate(accounts, headers=["ID", "Nickname", "Email", "Password"], tablefmt = self._style_menu.list_format())
 
 
     def check_password(self, password, hashed_password):
@@ -279,9 +279,8 @@ class AccountManager:
             self._style_menu.new_print("1. Change nickname")
             self._style_menu.new_print("2. Change password")
             self._style_menu.new_print("3. Change email")
-            self._style_menu.new_print("4. Change list format")
-            self._style_menu.new_print("5. Delete account")
-            self._style_menu.new_print("6. Return to the main menu")
+            self._style_menu.new_print("4. Delete account")
+            self._style_menu.new_print("5. Return to the main menu")
             setting_choice = input("Select an action: ")
             if setting_choice == "1":
                 self.change_nickname()
@@ -290,8 +289,6 @@ class AccountManager:
             elif setting_choice == "3":
                 self.change_email()
             elif setting_choice == "4":
-                self.list_settings_menu()
-            elif setting_choice == "5":
                 password = input("Enter your password: ")
                 rewrite_password = input("Rewrite your password: ")
                 current_password = self.account(self.current_id)['Password']
@@ -299,145 +296,12 @@ class AccountManager:
                     self.delete_account(self.current_email)
                 else:
                     self._style_menu.new_print("Email does not exist")
-            elif setting_choice == "6":
+            elif setting_choice == "5":
                 self._style_menu.new_print("Returning to the main menu")
             else:
                 self._style_menu.new_print("Invalid input. Please select an action again.")
         else:
             self._style_menu.new_print("You need to log in to access settings.")
-
-    
-    def todo_app_menu(self):
-        if self.current_id == None:
-            self._style_menu.new_print("You need to be logged in to access To-do application")
-            return False
-        else:
-            self.todo_app = ToDoApp(self.current_id)
-            self._style_menu.new_print(f"Logged in as {self.current_email}")
-        while True:
-            self._style_menu.new_print("\nTask Management Menu")
-            self._style_menu.new_print("1. Add a task")
-            self._style_menu.new_print("2. Mark a task as completed")
-            self._style_menu.new_print("3. Show all tasks")
-            self._style_menu.new_print("4. Delete a task")
-            self._style_menu.new_print("5. Return to main menu")
-
-            choice = input("Choose an action: ")
-
-            if choice == "1":
-                list_tasks = []
-                while True:
-                    task = input("Enter the task or press ENTER to finish: ").strip()
-                    if task == "":
-                        for task in list_tasks:
-                            self.todo_app.save_task(task)
-                        self._style_menu.new_print(self.todo_app.show_tasks())
-                        break
-                    else:
-                        list_tasks.append(task)
-            elif choice == "2":
-                if not self.todo_app.file_exists():
-                    self._style_menu.new_print("You need to add task first!")
-                else:
-                    self._style_menu.new_print(self.todo_app.show_tasks())
-                    task_id = input("Enter the task ID to mark as completed: ")
-                    self.todo_app.mark_task_completed(task_id)
-            elif choice == "3":
-                if not self.todo_app.file_exists():
-                    self._style_menu.new_print("You need to write your task first!")
-                else:
-                    self._style_menu.new_print(self.todo_app.show_tasks(self.show_format))
-            elif choice == "4":
-                task_id = input("Enter the task ID to delete: ").strip()
-                if not self.todo_app.file_exists():
-                    self._style_menu.new_print("You need to write your task first!")
-                elif task_id == "":    
-                    self._style_menu.new_print("Task ID not found")
-                else:
-                    self.todo_app.delete_task(task_id)
-            elif choice == "5":
-                self._style_menu.new_print("Returning to the main menu.")
-                break
-            else:
-                self._style_menu.new_print("Invalid input. Please choose an action again.")
-
-
-    def contact_app_menu(self):
-        contacts_manager = Contacts(self.current_id)
-        while True:
-            self._style_menu.new_print("1. Add contact.")
-            self._style_menu.new_print("2. Show contacts.")
-            self._style_menu.new_print("3. Find contact.")
-            self._style_menu.new_print("4. Delete contact.")
-            self._style_menu.new_print("5. Return to main menu")
-            choice = input("Enter your choice: ")
-
-            if choice == "1":
-                first_name = input("Enter first name: ")
-                last_name = input("Enter last name: ")
-                phone_number = input("Enter phone number: ")
-                email = input("Enter email: ").lower()
-                contacts_manager.save_contact(first_name, last_name, phone_number, email)
-
-            elif choice == "2":
-                self._style_menu.new_print(contacts_manager.show_contacts(self.show_format))
-
-            elif choice == "3":
-                contact = input("Find contact: ")
-                self._style_menu.new_print(contacts_manager.find_contact(contact))
-            elif choice == "4":
-                self._style_menu.new_print(contacts_manager.show_contacts(self.show_format))
-                contact_id = input("Enter ID of the contact to delete: ")
-                contacts_manager.delete_contact(contact_id)
-            elif choice == "5":
-                break
-            else:
-                self._style_menu.new_print("Invalid choice. Please enter a valid option.")
-
-
-    def calculator_app_menu(self):
-        calculator = Calculator()
-        while True:
-            expression = input("Enter an expression: ")
-
-            # Validate input
-            if not calculator.is_valid_expression(expression):
-                print("Invalid expression. Please enter a valid expression.")
-                continue
-
-            # Check for square root or square operation
-            if 'sqrt' in expression:
-                result = calculator.calculate_sqrt(expression)
-                if result is not None:
-                    print(f"Result: srqt {expression} = {result}")
-            elif 'square' in expression:
-                result = calculator.calculate_square(expression)
-                if result is not None:
-                    print(f"Result: square {expression} = {result}")
-            else:
-                # Split the expression into operands and operator
-                operator = calculator.get_operator(expression)
-                num1, num2 = map(float, expression.split(operator))
-
-                # Perform calculation based on operator
-                if operator == '+':
-                    print(f"Result: {num1} + {num2} = {calculator.add(num1, num2)}")
-                elif operator == '-':
-                    print(f"Result: {num1} - {num2} = {calculator.subtract(num1, num2)}")
-                elif operator == '*':
-                    print(f"Result: {num1} * {num2} = {calculator.multiply(num1, num2)}")
-                elif operator == '/':
-                    print(f"Result: {num1} / {num2} = {calculator.divide(num1, num2)}")
-                elif operator == '%':
-                    print(f"Result: {num1} % {num2} = {calculator.percent(num1, num2)}")
-
-            print("1. Perform another calculation.")
-            print()
-            again = input("Do you want to perform another calculation? (yes/no): ")
-            if again.lower() != 'yes':
-                return
-
-
 
 
     def main(self):
@@ -479,7 +343,7 @@ class AccountManager:
                         continue
                     self.save_account(nickname, email, password)
             elif choice == "2":
-                self._style_menu.new_print(self.show_accounts(self._style_menu.list_format()))
+                self._style_menu.new_print(self.show_accounts())
             elif choice == "3":
                 email = input("Enter your Email: ")
                 password = input("Enter your password: ")
@@ -499,16 +363,19 @@ class AccountManager:
                     self._style_menu.new_print("6. Return to main menu.")
                     app_choice = input("Enter your choice: ")
                     if app_choice == "1":
-                        self.todo_app_menu()
+                        todo = ToDoApp(self.current_id, self.current_email, self._style_menu)
+                        todo.todo_app_menu()
                     elif app_choice == "2":
-                        self.contact_app_menu()
+                        contact = Contacts(self.current_id, self._style_menu)
+                        contact.contact_app_menu()
                     elif app_choice == "3":
-                        self.calculator_app_menu()
+                        calculator = Calculator(self._style_menu)
+                        calculator.calculator_app_menu()
                     elif app_choice == "4":
                         weather = WeatherForecast("629c11a02db0490f99d123751240704", self._style_menu)
                         weather.weather_app_menu()
                     elif app_choice == "5":
-                        rate = Rate()
+                        rate = Rate(self._style_menu)
                         rate.rate_app_menu()
                     elif app_choice == "6":
                         continue
@@ -523,6 +390,7 @@ class AccountManager:
                 break
             else:
                 self._style_menu.new_print("Invalid input. Please select an action again.")
+
 
 if __name__ == "__main__":
     manager = AccountManager()

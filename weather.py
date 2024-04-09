@@ -27,11 +27,11 @@ class WeatherForecast():
         else:
             f"Failed to get weather forecast. Error code: {response.status_code}"
 
-    def display_forecast(self, format_choice, city, days=3):
+    def display_forecast(self, city, days=3):
         forecast_info = self.get_forecast(city, days)
         if isinstance(forecast_info, list):
             headers = ["Date", "Max Temperature", "Min Temperature", "Weather Condition"]
-            return tabulate(forecast_info, headers=headers, tablefmt=format_choice)
+            return tabulate(forecast_info, headers=headers, tablefmt=self.style_menu.list_format())
         else:
             return forecast_info
         
@@ -42,12 +42,12 @@ class WeatherForecast():
                 self.style_menu.new_print("2. Return to main menu")
                 choice = input("Enter your choice: ")
                 if choice == "1":
-                    city = input("Enter the city : ")
+                    city = input("Enter the city: ")
                     days = int(input("Enter the number of days for forecast (maximum 10): "))
 
                     if days > 10:
                         self.style_menu.new_print("Maximum number of forecast days is 10.")
-                    self.style_menu.new_print(self.display_forecast(self.style_menu.list_format, city, days))
+                    self.style_menu.new_print(self.display_forecast(city, days))
                 elif choice == "2":
                     return
                 else:

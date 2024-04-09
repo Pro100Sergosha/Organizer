@@ -4,13 +4,14 @@ from tabulate import tabulate
 
 
 class Styles:
-    def __init__(self):
-        self._list_format = "simple"
+    def __init__(self, list_format = "simple", background = Back.RESET, font_color = Fore.WHITE, font_style = Style.NORMAL, style_menu = None):
 
-        self._background = Back.RESET
-        self._font_color = Fore.WHITE
-        self._font_style = Style.NORMAL
-        self._style_menu = None
+        self._list_format = list_format
+
+        self._background = background
+        self._font_color = font_color
+        self._font_style = font_style
+        self._style_menu = style_menu
 
     def demo_show(self, format):
         demo_show = [["Demo First Name", "Demo Last Name", "Demo Email"]]
@@ -140,7 +141,7 @@ class Styles:
                 return
             elif format_choice in ["plain", "simple", "grid", "youtrack", "orgtbl", "rst", "mediawiki", "html", "pretty"]:
                 self._list_format = format_choice
-                return self._list_format
+                return
             else:
                 self.new_print("Invalid input.")
 
@@ -166,7 +167,7 @@ class Styles:
                 self._font_style = Style.NORMAL
                 self._font_color = Fore.WHITE
                 self._background = Back.RESET
-                self.list_format = "plain"
+                self._list_format = "plain"
             elif choice == "6":
                 return 
             else:
@@ -182,7 +183,7 @@ class Styles:
     def list_format(self):
         return self._list_format
     def new_print(self, text = None):
-        return print(self._font_color + self._background + self._font_style + f"{text}")
+        return print(self._font_color + self._background + self._font_style + text)
 
 if __name__ == "__main__":
     style = Styles()
