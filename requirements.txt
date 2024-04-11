@@ -1,0 +1,8 @@
+tabulate
+math
+csv
+re
+os
+bcrypt
+colorama
+requests

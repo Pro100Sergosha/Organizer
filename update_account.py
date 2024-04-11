@@ -6,18 +6,15 @@ from styles import Styles
 
 
 class Update:
-    def __init__(self, user_id = "1", logged_in = None , user_nickname = None, user_mail = None, user_password = None, style_menu = Styles()):
+    def __init__(self, user_mail = None, logged_in = None, style_menu = Styles()):
         self.logged_in = logged_in
-        self.user_id = user_id
-        self.user_nickname = user_nickname
         self.user_mail = user_mail
-        self.user_password = user_password
         self.style_menu = style_menu
-
         self.email_regex = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         self.password_regex = r"^(?=.*\d)(?=.*[!@#$%^&*()])(?=.*[a-zA-Z]).{8,}$"
 
         self.fieldnames = ["ID", "Nickname", "Email", "Password"]
+
 
     def update_account_info(self, field_to_update, new_value):
         if not self.logged_in:
@@ -49,18 +46,20 @@ class Update:
         elif field_to_update == "Nickname":
             self.style_menu.new_print("Nickname successfully updated.")
 
+
     def change_password(self):
         new_password = input("Enter your new password: ")
-        if not self.validate_password(new_password):
+        if not re.match(self.password_regex, new_password):
             self.style_menu.new_print("Password must contain at least 8 characters, including one digit and one special character.")
             return
 
         hashed_password = self.hash_password(new_password)
         self.update_account_info("Password", hashed_password.decode())
 
+
     def change_email(self):
         new_email = input("Enter your new email: ")
-        if not self.validate_email(new_email):
+        if not re.match(self.email_regex, new_email):
             self.style_menu.new_print("Invalid Email format.")
             return
 
@@ -70,35 +69,24 @@ class Update:
 
         self.update_account_info("Email", new_email)
 
-    def email_exists(self, email):
-        with open("accounts.csv", "r", newline="") as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                if row["Email"] == email:
-                    return True
-        return False
 
     def change_nickname(self):
         new_nickname = input("Enter your new nickname: ")
         self.update_account_info("Nickname", new_nickname)
 
-    def account(self):
-        with open("accounts.csv", "r") as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                for key, val in row.items():
-                    if val == self.user_id:
-                        return row
-            return
-        
-    def validate_password(self, password):
-        return re.match(self.password_regex, password)
-    
+  
+    def email_exists(self, email):
+     with open('accounts.csv', "r", newline="") as csvfile:
+         reader = csv.DictReader(csvfile)
+         for row in reader:
+             if row["Email"] == email:
+                 return True
+     return False 
+
+
     def hash_password(self, password):
         return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
-    def validate_email(self, email):
-        return re.match(self.email_regex, email)
 
     def delete_account(self, email):
         accounts = []
@@ -116,6 +104,7 @@ class Update:
         self.current_email = None
         self.logged_in = False
         self.style_menu.new_print("Account deleted.")
+
 
     def account_settings_menu(self):
         if self.logged_in:
@@ -149,4 +138,4 @@ class Update:
 
 if __name__ == "__main__":
     account = Update()
-    account.account()
+    account.account_settings_menu()
