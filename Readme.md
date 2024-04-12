@@ -54,3 +54,10 @@ Run the Program: To use the program, execute the main script. You can do this by
 python project.py
 ```
 
+## Questions and Feedback
+
+If you have any questions or suggestions for improving the project, feel free to contact me via email:
+
+prizrakgames21@mail.ru
+
+I'd be happy to hear your feedback and assist with any inquiries!
