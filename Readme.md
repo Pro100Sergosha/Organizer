@@ -20,7 +20,7 @@ The goal of the "Organizer" project is to provide users with a convenient and ve
 
 ## Usage       !Attention to Python commands! They may differ for different OS!
 
-To use the Bitcoin price analysis program, make sure you have the following Python libraries/modules installed:
+To use the Organizer program, make sure you have the following Python libraries/modules installed:
 
 - `tabulate`
 - `math`
